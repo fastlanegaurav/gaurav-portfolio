@@ -1,1470 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gaurav Kumar Singh — DevSecOps Engineer</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Bricolage+Grotesque:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-    :root {
-      --white: #ffffff;
-      --off: #f9f9f8;
-      --off2: #f3f2f0;
-      --off3: #ece9e3;
-      --black: #0a0a0a;
-      --ink: #1a1a1a;
-      --muted: #6b6860;
-      --muted2: #9e9b94;
-      --border: rgba(0,0,0,0.07);
-      --border2: rgba(0,0,0,0.12);
-      --border3: rgba(0,0,0,0.22);
-      --blue: #1a6bfa;
-      --blue2: #0d4fd4;
-      --blue-light: #e8f0fe;
-      --green: #00a86b;
-      --green-light: #e6f7f1;
-      --amber: #d97706;
-      --amber-light: #fef3c7;
-      --red: #e5463a;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 16px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04);
-      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05);
-    }
-
-    html{scroll-behavior:smooth}
-
-    body {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      background: var(--white);
-      color: var(--ink);
-      font-size: 16px;
-      line-height: 1.65;
-      overflow-x: hidden;
-    }
-
-    /* ─── SPINNING RING LOADER ─── */
-    #loader {
-      position: fixed;
-      inset: 0;
-      background: var(--white);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 24px;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
-    }
-
-    #loader.hidden { opacity: 0; visibility: hidden; }
-
-    .loader-rings {
-      position: relative;
-      width: 80px;
-      height: 80px;
-    }
-
-    .loader-ring {
-      position: absolute;
-      border-radius: 50%;
-      border: 2px solid transparent;
-    }
-
-    .loader-ring:nth-child(1) {
-      inset: 0;
-      border-top-color: var(--blue);
-      animation: spin 1s linear infinite;
-    }
-
-    .loader-ring:nth-child(2) {
-      inset: 12px;
-      border-right-color: var(--ink);
-      animation: spin 0.8s linear infinite reverse;
-    }
-
-    .loader-ring:nth-child(3) {
-      inset: 24px;
-      border-bottom-color: var(--blue);
-      animation: spin 0.6s linear infinite;
-    }
-
-    .loader-dot {
-      position: absolute;
-      inset: 34px;
-      background: var(--blue);
-      border-radius: 50%;
-      animation: pulse-loader 1s ease infinite;
-    }
-
-    @keyframes pulse-loader {
-      0%,100%{transform:scale(1);opacity:1}
-      50%{transform:scale(0.6);opacity:0.4}
-    }
-
-    .loader-text {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ─── NAV ─── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 500;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 64px;
-      height: 64px;
-      background: rgba(255,255,255,0.88);
-      backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 22px;
-      color: var(--ink);
-      text-decoration: none;
-      letter-spacing: -0.5px;
-    }
-
-    .nav-logo span { color: var(--blue); }
-
-    nav ul { list-style: none; display: flex; gap: 8px; align-items: center; }
-
-    nav ul a {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--muted);
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 999px;
-      transition: all 0.2s;
-    }
-
-    nav ul a:hover { color: var(--ink); background: var(--off2); }
-
-    .nav-cta {
-      background: var(--blue) !important;
-      color: white !important;
-      padding: 8px 20px !important;
-      border-radius: 999px !important;
-    }
-
-    .nav-cta:hover { background: var(--blue2) !important; color: white !important; }
-
-    /* ─── HERO ─── */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      gap: 80px;
-      padding: 100px 64px 80px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 80% 50%, rgba(26,107,250,0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(0,168,107,0.04) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    /* SPINNING ORBIT — hero right */
-    .hero-visual {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 500px;
-    }
-
-    .orbit-center {
-      position: relative;
-      z-index: 10;
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      background: var(--white);
-      border: 1px solid var(--border2);
-      box-shadow: var(--shadow-lg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'DM Serif Display', serif;
-      font-size: 36px;
-      color: var(--blue);
-    }
-
-    .orbit {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px dashed var(--border3);
-    }
-
-    .orbit-1 { width: 220px; height: 220px; animation: spin 12s linear infinite; }
-    .orbit-2 { width: 320px; height: 320px; animation: spin 20s linear infinite reverse; }
-    .orbit-3 { width: 420px; height: 420px; animation: spin 30s linear infinite; }
-    .orbit-4 { width: 500px; height: 500px; animation: spin 45s linear infinite reverse; border-style: solid; border-color: var(--border); }
-
-    .orbit-node {
-      position: absolute;
-      border-radius: 50%;
-      background: var(--white);
-      border: 1px solid var(--border2);
-      box-shadow: var(--shadow-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      animation: counter-spin linear infinite;
-    }
-
-    /* Counter-spin so icon stays upright */
-    .orbit-1 .orbit-node { width: 48px; height: 48px; top: -24px; left: 50%; transform: translateX(-50%); animation-duration: 12s; }
-    .orbit-2 .orbit-node:nth-child(1) { width: 44px; height: 44px; top: -22px; left: 50%; transform: translateX(-50%); animation-duration: 20s; animation-direction: reverse; }
-    .orbit-2 .orbit-node:nth-child(2) { width: 44px; height: 44px; bottom: -22px; left: 50%; transform: translateX(-50%); animation-duration: 20s; animation-direction: reverse; }
-    .orbit-3 .orbit-node:nth-child(1) { width: 42px; height: 42px; top: -21px; left: 50%; transform: translateX(-50%); animation-duration: 30s; }
-    .orbit-3 .orbit-node:nth-child(2) { width: 42px; height: 42px; top: 50%; right: -21px; transform: translateY(-50%); animation-duration: 30s; }
-    .orbit-3 .orbit-node:nth-child(3) { width: 42px; height: 42px; bottom: -21px; left: 50%; transform: translateX(-50%); animation-duration: 30s; }
-
-    @keyframes counter-spin { to { transform: translateX(-50%) rotate(-360deg); } }
-    @keyframes counter-spin-y { to { transform: translateY(-50%) rotate(-360deg); } }
-
-    .orbit-3 .orbit-node:nth-child(2) { animation-name: counter-spin-side; }
-    @keyframes counter-spin-side { to { transform: translateY(-50%) rotate(-360deg); } }
-
-    /* SPIN BADGE — floating chips around orbit */
-    .orbit-tag {
-      position: absolute;
-      background: var(--white);
-      border: 1px solid var(--border2);
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--ink);
-      box-shadow: var(--shadow-sm);
-      white-space: nowrap;
-    }
-
-    .orbit-tag-1 { top: 12%; right: 0; }
-    .orbit-tag-2 { bottom: 20%; right: 4%; }
-    .orbit-tag-3 { top: 30%; left: 0; }
-    .orbit-tag-4 { bottom: 12%; left: 8%; }
-
-    /* SPINNING STAT RING */
-    .stat-ring-container {
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      top: 50%;
-      right: -90px;
-      transform: translateY(-50%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* HERO LEFT */
-    .hero-content { position: relative; z-index: 5; }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--blue);
-      background: var(--blue-light);
-      padding: 6px 14px;
-      border-radius: 999px;
-      margin-bottom: 28px;
-      letter-spacing: 0.02em;
-    }
-
-    .hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse-g 2s ease infinite; }
-    @keyframes pulse-g { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
-
-    .hero h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(48px, 5.5vw, 80px);
-      line-height: 1.05;
-      letter-spacing: -2px;
-      margin-bottom: 24px;
-      color: var(--ink);
-    }
-
-    .hero h1 em { font-style: italic; color: var(--blue); }
-
-    .hero-desc {
-      font-size: 17px;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 480px;
-      font-weight: 400;
-      margin-bottom: 36px;
-    }
-
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-
-    .btn-blue {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 26px;
-      background: var(--blue);
-      color: white;
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: 999px;
-      text-decoration: none;
-      transition: all 0.25s;
-      box-shadow: 0 2px 8px rgba(26,107,250,0.3);
-    }
-
-    .btn-blue:hover { background: var(--blue2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,107,250,0.35); }
-
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 26px;
-      border: 1.5px solid var(--border3);
-      color: var(--ink);
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: 999px;
-      text-decoration: none;
-      transition: all 0.25s;
-    }
-
-    .btn-outline:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
-
-    /* ─── MARQUEE / LOGO STRIP ─── */
-    .logo-strip {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
-      padding: 18px 0;
-      background: var(--off);
-    }
-
-    .marquee { display: flex; animation: marquee 25s linear infinite; white-space: nowrap; }
-    .marquee:hover { animation-play-state: paused; }
-
-    .marquee-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 40px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted2);
-      border-right: 1px solid var(--border);
-      flex-shrink: 0;
-      letter-spacing: 0.04em;
-    }
-
-    .marquee-item span { font-size: 16px; }
-
-    @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-
-    /* ─── IMPACT METRICS ─── */
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .metric-item {
-      padding: 48px 52px;
-      border-right: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-
-    .metric-item:last-child { border-right: none; }
-    .metric-item:hover { background: var(--off); }
-
-    .metric-spin {
-      position: absolute;
-      top: -20px;
-      right: -20px;
-      width: 80px;
-      height: 80px;
-      opacity: 0.06;
-    }
-
-    .metric-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: 52px;
-      line-height: 1;
-      color: var(--ink);
-      letter-spacing: -2px;
-    }
-
-    .metric-num .accent { color: var(--blue); }
-    .metric-label { font-size: 14px; color: var(--muted); margin-top: 8px; font-weight: 500; }
-
-    /* ─── SECTION LAYOUT ─── */
-    section { padding: 96px 64px; }
-
-    .section-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 20px;
-    }
-
-    .section-tag::before { content: ''; display: inline-block; width: 20px; height: 2px; background: var(--blue); border-radius: 2px; }
-
-    .section-h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(32px, 3.5vw, 52px);
-      line-height: 1.1;
-      letter-spacing: -1.5px;
-      color: var(--ink);
-      margin-bottom: 56px;
-    }
-
-    .section-h2 em { font-style: italic; color: var(--blue); }
-
-    /* ─── ABOUT ─── */
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-
-    .about-body {
-      font-size: 16px;
-      color: var(--muted);
-      line-height: 1.85;
-      font-weight: 400;
-    }
-
-    .about-body + .about-body { margin-top: 18px; }
-
-    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
-
-    .chip {
-      font-size: 13px;
-      font-weight: 500;
-      padding: 6px 16px;
-      border-radius: 999px;
-      border: 1px solid var(--border2);
-      color: var(--ink);
-      background: var(--off);
-      transition: all 0.2s;
-      cursor: default;
-    }
-
-    .chip:hover { background: var(--blue-light); border-color: rgba(26,107,250,0.25); color: var(--blue); }
-
-    /* SPINNING PROGRESS RINGS */
-    .ring-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
-    .ring-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-      text-align: center;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.3s;
-    }
-
-    .ring-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-
-    .ring-svg-wrap {
-      position: relative;
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 16px;
-    }
-
-    .ring-svg-wrap svg { position: absolute; inset: 0; transform: rotate(-90deg); }
-
-    .ring-center-text {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'DM Serif Display', serif;
-      font-size: 20px;
-      color: var(--ink);
-      transform: rotate(0deg);
-    }
-
-    .ring-track { fill: none; stroke: var(--off2); stroke-width: 6; }
-
-    .ring-fill {
-      fill: none;
-      stroke-width: 6;
-      stroke-linecap: round;
-      stroke-dasharray: 251.2;
-      stroke-dashoffset: 251.2;
-      transition: stroke-dashoffset 1.6s cubic-bezier(0.16,1,0.3,1);
-    }
-
-    .ring-fill.blue { stroke: var(--blue); }
-    .ring-fill.green { stroke: var(--green); }
-    .ring-fill.amber { stroke: var(--amber); }
-
-    /* Spinning decoration ring around SVG */
-    .ring-deco {
-      position: absolute;
-      inset: -8px;
-      border-radius: 50%;
-      border: 1.5px dashed rgba(0,0,0,0.1);
-      animation: spin 8s linear infinite;
-    }
-
-    .ring-deco::before {
-      content: '';
-      position: absolute;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--blue);
-      top: -4px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .ring-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-    .ring-sub { font-size: 12px; color: var(--muted2); }
-
-    /* ─── WORK / CASE STUDIES ─── */
-    .work-grid { display: flex; flex-direction: column; gap: 2px; }
-
-    .work-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 40px 48px;
-      display: grid;
-      grid-template-columns: 1fr 2fr 1fr;
-      gap: 48px;
-      align-items: start;
-      transition: all 0.35s;
-      cursor: default;
-      margin-bottom: 12px;
-    }
-
-    .work-card:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-3px);
-      border-color: rgba(26,107,250,0.2);
-    }
-
-    .work-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: 48px;
-      color: var(--off3);
-      line-height: 1;
-      letter-spacing: -2px;
-    }
-
-    .work-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--blue);
-      background: var(--blue-light);
-      padding: 4px 12px;
-      border-radius: 999px;
-      margin-bottom: 14px;
-    }
-
-    .work-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 26px;
-      letter-spacing: -0.5px;
-      color: var(--ink);
-      margin-bottom: 12px;
-      line-height: 1.2;
-    }
-
-    .work-desc { font-size: 14px; color: var(--muted); line-height: 1.8; }
-
-    .work-metrics { display: flex; flex-direction: column; gap: 16px; }
-
-    .work-metric-item {
-      background: var(--off);
-      border-radius: 14px;
-      padding: 16px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .work-metric-val {
-      font-family: 'DM Serif Display', serif;
-      font-size: 28px;
-      color: var(--ink);
-      letter-spacing: -1px;
-      line-height: 1;
-    }
-
-    .work-metric-val.blue { color: var(--blue); }
-    .work-metric-val.green { color: var(--green); }
-    .work-metric-key { font-size: 11px; font-weight: 600; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
-
-    .work-details { display: flex; flex-direction: column; gap: 16px; }
-
-    .work-detail-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      margin-bottom: 6px;
-    }
-
-    .work-detail-body { font-size: 13px; color: var(--muted); line-height: 1.7; }
-
-    .work-detail-list { list-style: none; }
-    .work-detail-list li { font-size: 13px; color: var(--muted); padding: 3px 0; padding-left: 14px; position: relative; }
-    .work-detail-list li::before { content: '·'; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
-
-    /* ─── TECH STACK ─── */
-    .stack-bg { background: var(--off); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-
-    .stack-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-
-    .stack-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      transition: all 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stack-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: rgba(26,107,250,0.2); }
-
-    /* Tiny spinning icon on hover */
-    .stack-icon-wrap {
-      width: 48px; height: 48px;
-      border-radius: 14px;
-      background: var(--off);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      margin-bottom: 14px;
-      transition: transform 0.6s ease;
-    }
-
-    .stack-card:hover .stack-icon-wrap { transform: rotate(360deg); }
-
-    .stack-name { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-    .stack-desc { font-size: 12px; color: var(--muted2); line-height: 1.5; }
-
-    /* ─── CERTIFICATIONS ─── */
-    .cert-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
-    .cert-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cert-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-
-    /* Spinning badge in corner */
-    .cert-spin-badge {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
-    }
-
-    .cert-spin-badge svg { animation: spin 6s linear infinite; }
-
-    .cert-icon {
-      width: 52px; height: 52px;
-      border-radius: 14px;
-      background: var(--blue-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      margin-bottom: 16px;
-    }
-
-    .cert-org { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
-    .cert-name { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--ink); line-height: 1.3; margin-bottom: 10px; }
-    .cert-meta { font-size: 13px; color: var(--muted2); }
-
-    /* ─── EXPERIENCE ─── */
-    .exp-bg { background: var(--off); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-
-    .timeline { display: flex; flex-direction: column; gap: 0; }
-
-    .tl-item {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 48px;
-      padding: 48px 0;
-      border-bottom: 1px solid var(--border);
-      align-items: start;
-    }
-
-    .tl-item:last-child { border-bottom: none; }
-
-    .tl-date {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted2);
-      padding-top: 6px;
-      letter-spacing: 0.02em;
-    }
-
-    .tl-role {
-      font-family: 'DM Serif Display', serif;
-      font-size: 22px;
-      color: var(--ink);
-      margin-bottom: 4px;
-      letter-spacing: -0.5px;
-    }
-
-    .tl-company { font-size: 14px; color: var(--blue); font-weight: 600; margin-bottom: 14px; }
-    .tl-desc { font-size: 14px; color: var(--muted); line-height: 1.8; }
-
-    .tl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-
-    .tl-tag {
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 999px;
-      background: var(--blue-light);
-      color: var(--blue);
-    }
-
-    /* ─── CONTACT ─── */
-    .contact-section {
-      text-align: center;
-      padding: 120px 64px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Big spinning ring behind CTA */
-    .contact-ring {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      animation: spin 40s linear infinite;
-      pointer-events: none;
-    }
-
-    .contact-ring::before {
-      content: '';
-      position: absolute;
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: var(--blue);
-      top: -6px; left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .contact-ring-2 {
-      position: absolute;
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
-      border: 1px dashed var(--border2);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      animation: spin 25s linear infinite reverse;
-      pointer-events: none;
-    }
-
-    .contact-ring-2::before {
-      content: '';
-      position: absolute;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      bottom: -4px; left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .contact-eyebrow {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      margin-bottom: 20px;
-    }
-
-    .contact-h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(36px, 5vw, 64px);
-      letter-spacing: -2px;
-      line-height: 1.05;
-      color: var(--ink);
-      margin-bottom: 20px;
-    }
-
-    .contact-h2 em { font-style: italic; color: var(--blue); }
-
-    .contact-sub { font-size: 17px; color: var(--muted); max-width: 440px; margin: 0 auto 40px; line-height: 1.7; }
-
-    .contact-email {
-      display: inline-block;
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--blue);
-      text-decoration: none;
-      margin-bottom: 36px;
-      transition: opacity 0.2s;
-    }
-
-    .contact-email:hover { opacity: 0.7; }
-
-    /* ─── FOOTER ─── */
-    footer {
-      padding: 24px 64px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      color: var(--muted2);
-    }
-
-    /* ─── SCROLL ANIM ─── */
-    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.75s ease, transform 0.75s ease; }
-    .fade-up.visible { opacity: 1; transform: none; }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      nav { padding: 0 20px; }
-      nav ul { display: none; }
-      .hero { grid-template-columns: 1fr; padding: 90px 24px 60px; gap: 40px; }
-      .hero-visual { height: 320px; }
-      .orbit-3, .orbit-4 { display: none; }
-      section { padding: 64px 24px; }
-      .about-grid { grid-template-columns: 1fr; gap: 40px; }
-      .metrics { grid-template-columns: 1fr 1fr; }
-      .metric-item { border-bottom: 1px solid var(--border); }
-      .ring-grid { grid-template-columns: repeat(3, 1fr); }
-      .work-card { grid-template-columns: 1fr; gap: 24px; padding: 28px; }
-      .work-num { display: none; }
-      .stack-grid { grid-template-columns: repeat(2, 1fr); }
-      .cert-row { grid-template-columns: 1fr; }
-      .tl-item { grid-template-columns: 1fr; gap: 8px; }
-      .contact-ring, .contact-ring-2 { display: none; }
-      footer { padding: 16px 24px; flex-direction: column; gap: 6px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gaurav Kumar Singh — DevSecOps Engineer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Bricolage+Grotesque:wght@300;400;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --blue:#1a6bfa;
+  --bg:#ffffff;
+  --text:#1a1a1a;
+}
+
+body{
+  font-family:'Bricolage Grotesque',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* DARK MODE */
+body.dark{
+  --bg:#0a0a0a;
+  --text:#f5f5f5;
+}
+
+/* PROGRESS BAR */
+#progress{
+  position:fixed;
+  top:0;
+  left:0;
+  height:3px;
+  background:var(--blue);
+  width:0%;
+  z-index:9999;
+}
+
+/* CURSOR */
+.cursor{
+  position:fixed;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:rgba(26,107,250,0.3);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+}
+
+/* NAV */
+nav{
+  position:fixed;
+  top:0;width:100%;
+  display:flex;
+  justify-content:space-between;
+  padding:16px 40px;
+  background:rgba(255,255,255,0.8);
+  backdrop-filter:blur(10px);
+}
+
+body.dark nav{
+  background:rgba(10,10,10,0.8);
+}
+
+nav a{color:var(--text);text-decoration:none;margin:0 10px}
+
+/* HERO */
+.hero{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  padding-top:80px;
+}
+
+.hero h1{
+  font-size:48px;
+  max-width:400px;
+}
+
+/* BUTTON */
+.btn{
+  background:var(--blue);
+  color:white;
+  padding:12px 20px;
+  border-radius:30px;
+  text-decoration:none;
+  display:inline-block;
+  margin-top:20px;
+}
+
+/* LOTTIE */
+.hero-visual{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:40px;
+}
+</style>
 </head>
+
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="loader-rings">
-    <div class="loader-ring"></div>
-    <div class="loader-ring"></div>
-    <div class="loader-ring"></div>
-    <div class="loader-dot"></div>
-  </div>
-  <div class="loader-text">Loading Portfolio</div>
-</div>
+<div id="progress"></div>
 
-<!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">Gaurav<span>.</span></a>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#work">Work</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#stack">Stack</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#contact" class="nav-cta">Hire Me →</a></li>
-  </ul>
+  <div>Gaurav.</div>
+  <div>
+    <a href="#">About</a>
+    <a href="#">Work</a>
+    <button id="toggle">🌙</button>
+  </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
 
-  <div class="hero-content">
-    <div class="hero-eyebrow">
-      <span class="hero-eyebrow-dot"></span>
-      Open to opportunities
-    </div>
-    <h1>
-      Building<br>
-      <em>resilient</em><br>
-      infrastructure
-    </h1>
-    <p class="hero-desc">
-      DevSecOps Engineer & Project Management Associate with 3+ years delivering global-scale systems across US and Europe. AWS · Kubernetes · CI/CD · Terraform.
-    </p>
-    <div class="hero-actions">
-      <a href="#work" class="btn-blue">View my work →</a>
-      <a href="#contact" class="btn-outline">Get in touch</a>
-    </div>
-  </div>
-
-  <!-- SPINNING ORBIT VISUAL -->
-  <div class="hero-visual">
-    <!-- Orbit rings -->
-    <div class="orbit orbit-4"></div>
-    <div class="orbit orbit-3">
-      <div class="orbit-node">☁️</div>
-      <div class="orbit-node">🐳</div>
-      <div class="orbit-node">🔄</div>
-    </div>
-    <div class="orbit orbit-2">
-      <div class="orbit-node">⎈</div>
-      <div class="orbit-node">🏗️</div>
-    </div>
-    <div class="orbit orbit-1">
-      <div class="orbit-node">🐍</div>
-    </div>
-    <!-- Center -->
-    <div class="orbit-center">GKS</div>
-
-    <!-- Floating tags -->
-    <div class="orbit-tag orbit-tag-1">AWS Certified ✓</div>
-    <div class="orbit-tag orbit-tag-2">CKA Certified ✓</div>
-    <div class="orbit-tag orbit-tag-3">PMP Certified ✓</div>
-    <div class="orbit-tag orbit-tag-4">100% SLA ✓</div>
-  </div>
-</section>
-
-<!-- MARQUEE -->
-<div class="logo-strip">
-  <div class="marquee">
-    <span class="marquee-item"><span>☁️</span> AWS</span>
-    <span class="marquee-item"><span>⎈</span> Kubernetes</span>
-    <span class="marquee-item"><span>🐳</span> Docker</span>
-    <span class="marquee-item"><span>🏗️</span> Terraform</span>
-    <span class="marquee-item"><span>🔄</span> Jenkins</span>
-    <span class="marquee-item"><span>🐍</span> Python</span>
-    <span class="marquee-item"><span>🔌</span> REST APIs</span>
-    <span class="marquee-item"><span>🛍️</span> Shopify</span>
-    <span class="marquee-item"><span>📦</span> GitHub Actions</span>
-    <span class="marquee-item"><span>📊</span> CloudWatch</span>
-    <span class="marquee-item"><span>📬</span> SQS / SNS</span>
-    <span class="marquee-item"><span>🗂️</span> Jira</span>
-    <!-- duplicate for loop -->
-    <span class="marquee-item"><span>☁️</span> AWS</span>
-    <span class="marquee-item"><span>⎈</span> Kubernetes</span>
-    <span class="marquee-item"><span>🐳</span> Docker</span>
-    <span class="marquee-item"><span>🏗️</span> Terraform</span>
-    <span class="marquee-item"><span>🔄</span> Jenkins</span>
-    <span class="marquee-item"><span>🐍</span> Python</span>
-    <span class="marquee-item"><span>🔌</span> REST APIs</span>
-    <span class="marquee-item"><span>🛍️</span> Shopify</span>
-    <span class="marquee-item"><span>📦</span> GitHub Actions</span>
-    <span class="marquee-item"><span>📊</span> CloudWatch</span>
-    <span class="marquee-item"><span>📬</span> SQS / SNS</span>
-    <span class="marquee-item"><span>🗂️</span> Jira</span>
-  </div>
+<div>
+  <h1 id="typing"></h1>
+  <a href="#" class="btn">View Work</a>
 </div>
 
-<!-- METRICS -->
-<div class="metrics fade-up">
-  <div class="metric-item">
-    <svg class="metric-spin" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 8s linear infinite">
-      <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="1" stroke-dasharray="6 4"/>
-    </svg>
-    <div class="metric-num"><span class="accent count-up" data-target="100" data-suffix="%">0%</span></div>
-    <div class="metric-label">SLA Compliance</div>
-  </div>
-  <div class="metric-item">
-    <svg class="metric-spin" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 10s linear infinite reverse">
-      <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="1" stroke-dasharray="4 6"/>
-    </svg>
-    <div class="metric-num"><span class="count-up" data-target="15" data-suffix="+">0+</span></div>
-    <div class="metric-label">Global Projects Shipped</div>
-  </div>
-  <div class="metric-item">
-    <svg class="metric-spin" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 6s linear infinite">
-      <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="1" stroke-dasharray="8 3"/>
-    </svg>
-    <div class="metric-num"><span class="count-up" data-target="80" data-suffix="%">0%</span></div>
-    <div class="metric-label">Manual Ops Reduced</div>
-  </div>
-  <div class="metric-item">
-    <svg class="metric-spin" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 12s linear infinite reverse">
-      <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="1" stroke-dasharray="3 8"/>
-    </svg>
-    <div class="metric-num"><span class="count-up" data-target="3" data-suffix="+">0+</span></div>
-    <div class="metric-label">Years Experience</div>
-  </div>
+<div class="hero-visual">
+  <lottie-player 
+    src="https://assets10.lottiefiles.com/packages/lf20_9cyyl8i7.json"
+    background="transparent"
+    speed="1"
+    style="width:300px;height:300px;"
+    loop autoplay>
+  </lottie-player>
 </div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-tag">About</div>
-  <div class="about-grid fade-up">
-    <div>
-      <h2 class="section-h2" style="margin-bottom: 24px;">Engineering reliability at <em>global scale</em></h2>
-      <p class="about-body">Results-driven DevSecOps Engineer and Project Management Associate with 3+ years delivering global-scale web, eCommerce, and cloud infrastructure projects across the US and Europe.</p>
-      <p class="about-body">Expert in CI/CD automation, cloud architecture, API integration, and Agile delivery — bridging the gap between robust engineering and on-time, on-budget execution.</p>
-      <div class="tag-row">
-        <span class="chip">CI/CD Automation</span>
-        <span class="chip">Cloud Architecture</span>
-        <span class="chip">Agile Delivery</span>
-        <span class="chip">API Integration</span>
-        <span class="chip">DevSecOps</span>
-        <span class="chip">Infrastructure as Code</span>
-      </div>
-    </div>
-    <!-- SPINNING RING SKILL CARDS -->
-    <div>
-      <div class="ring-grid">
-        <div class="ring-card">
-          <div class="ring-svg-wrap">
-            <div class="ring-deco"></div>
-            <svg width="90" height="90" viewBox="0 0 90 90">
-              <circle class="ring-track" cx="45" cy="45" r="40"/>
-              <circle class="ring-fill blue" cx="45" cy="45" r="40" data-pct="92"/>
-            </svg>
-            <div class="ring-center-text">92%</div>
-          </div>
-          <div class="ring-name">AWS</div>
-          <div class="ring-sub">Cloud Architecture</div>
-        </div>
-        <div class="ring-card">
-          <div class="ring-svg-wrap">
-            <div class="ring-deco" style="animation-duration: 10s; animation-direction: reverse;"></div>
-            <svg width="90" height="90" viewBox="0 0 90 90">
-              <circle class="ring-track" cx="45" cy="45" r="40"/>
-              <circle class="ring-fill green" cx="45" cy="45" r="40" data-pct="88"/>
-            </svg>
-            <div class="ring-center-text">88%</div>
-          </div>
-          <div class="ring-name">Kubernetes</div>
-          <div class="ring-sub">Orchestration</div>
-        </div>
-        <div class="ring-card">
-          <div class="ring-svg-wrap">
-            <div class="ring-deco" style="animation-duration: 12s;"></div>
-            <svg width="90" height="90" viewBox="0 0 90 90">
-              <circle class="ring-track" cx="45" cy="45" r="40"/>
-              <circle class="ring-fill blue" cx="45" cy="45" r="40" data-pct="90"/>
-            </svg>
-            <div class="ring-center-text">90%</div>
-          </div>
-          <div class="ring-name">CI/CD</div>
-          <div class="ring-sub">Pipeline Design</div>
-        </div>
-        <div class="ring-card">
-          <div class="ring-svg-wrap">
-            <div class="ring-deco" style="animation-duration: 9s; animation-direction: reverse;"></div>
-            <svg width="90" height="90" viewBox="0 0 90 90">
-              <circle class="ring-track" cx="45" cy="45" r="40"/>
-              <circle class="ring-fill amber" cx="45" cy="45" r="40" data-pct="85"/>
-            </svg>
-            <div class="ring-center-text">85%</div>
-          </div>
-          <div class="ring-name">Terraform</div>
-          <div class="ring-sub">IaC</div>
-        </div>
-        <div class="ring-card">
-          <div class="ring-svg-wrap">
-            <div class="ring-deco" style="animation-duration: 11s;"></div>
-            <svg width="90" height="90" viewBox="0 0 90 90">
-              <circle class="ring-track" cx="45" cy="45" r="40"/>
-              <circle class="ring-fill green" cx="45" cy="45" r="40" data-pct="80"/>
-            </svg>
-            <div class="ring-center-text">80%</div>
-          </div>
-          <div class="ring-name">Python</div>
-          <div class="ring-sub">Automation</div>
-        </div>
-        <div class="ring-card">
-          <div class="ring-svg-wrap">
-            <div class="ring-deco" style="animation-duration: 7s; animation-direction: reverse;"></div>
-            <svg width="90" height="90" viewBox="0 0 90 90">
-              <circle class="ring-track" cx="45" cy="45" r="40"/>
-              <circle class="ring-fill blue" cx="45" cy="45" r="40" data-pct="95"/>
-            </svg>
-            <div class="ring-center-text">95%</div>
-          </div>
-          <div class="ring-name">Proj. Mgmt</div>
-          <div class="ring-sub">Agile / PMP</div>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
 
-<!-- WORK -->
-<section id="work" style="background: var(--off); border-top: 1px solid var(--border);">
-  <div class="section-tag">Case Studies</div>
-  <h2 class="section-h2">Selected <em>work</em></h2>
-  <div class="work-grid fade-up">
-
-    <div class="work-card">
-      <div class="work-num">01</div>
-      <div>
-        <div class="work-badge">Infrastructure · Automation</div>
-        <h3 class="work-title">CI/CD Automation Platform</h3>
-        <p class="work-desc">Replaced a slow, error-prone manual deployment process with a fully automated multi-stage pipeline — enabling consistent, reliable releases with zero-downtime rollouts across production environments.</p>
-        <div class="work-details" style="margin-top: 20px;">
-          <div>
-            <div class="work-detail-label">Architecture</div>
-            <div class="work-detail-body">Developer → GitHub → Jenkins Pipeline → Docker Build → Kubernetes → CloudWatch Monitoring</div>
-          </div>
-          <div>
-            <div class="work-detail-label">Key Decisions</div>
-            <ul class="work-detail-list">
-              <li>Docker for consistent build environments</li>
-              <li>Kubernetes for scalability & zero-downtime</li>
-              <li>Automated pre-deploy test gates</li>
-              <li>Rollback strategy for failed deploys</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="work-metrics">
-        <div class="work-metric-item">
-          <div class="work-metric-val blue">20%</div>
-          <div class="work-metric-key">Faster Deployments</div>
-        </div>
-        <div class="work-metric-item">
-          <div class="work-metric-val green">80%</div>
-          <div class="work-metric-key">Manual Work Cut</div>
-        </div>
-        <div class="work-metric-item">
-          <div class="work-metric-val">Zero</div>
-          <div class="work-metric-key">Downtime Incidents</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="work-card">
-      <div class="work-num">02</div>
-      <div>
-        <div class="work-badge">AWS · Serverless</div>
-        <h3 class="work-title">Serverless Data Pipeline</h3>
-        <p class="work-desc">Redesigned a costly, unreliable batch processing system into an event-driven serverless architecture — drastically lowering infrastructure spend while improving fault tolerance and scalability.</p>
-        <div class="work-details" style="margin-top: 20px;">
-          <div>
-            <div class="work-detail-label">Solution</div>
-            <ul class="work-detail-list">
-              <li>Event-driven triggers via AWS SQS & SNS</li>
-              <li>AWS Lambda for scalable stateless compute</li>
-              <li>CloudWatch real-time monitoring & alerts</li>
-            </ul>
-          </div>
-          <div>
-            <div class="work-detail-label">Stack</div>
-            <div class="work-detail-body">AWS Lambda · SQS · SNS · CloudWatch · S3</div>
-          </div>
-        </div>
-      </div>
-      <div class="work-metrics">
-        <div class="work-metric-item">
-          <div class="work-metric-val blue">60%</div>
-          <div class="work-metric-key">Cost Reduction</div>
-        </div>
-        <div class="work-metric-item">
-          <div class="work-metric-val green">90%</div>
-          <div class="work-metric-key">Reliability Gain</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="work-card">
-      <div class="work-num">03</div>
-      <div>
-        <div class="work-badge">eCommerce · Project Management</div>
-        <h3 class="work-title">Global eCommerce Delivery</h3>
-        <p class="work-desc">Led delivery of 10+ eCommerce projects for global clients across US and Europe — coordinating cross-functional teams, managing scope risk, and ensuring every project hit its SLA commitment.</p>
-        <div class="work-details" style="margin-top: 20px;">
-          <div>
-            <div class="work-detail-label">PM Approach</div>
-            <ul class="work-detail-list">
-              <li>Agile delivery with 2-week sprint cycles</li>
-              <li>Stakeholder reporting & risk management</li>
-              <li>Cross-timezone coordination (US + EU)</li>
-            </ul>
-          </div>
-          <div>
-            <div class="work-detail-label">Stack</div>
-            <div class="work-detail-body">Shopify · WooCommerce · REST APIs · Cloud Hosting · Jira</div>
-          </div>
-        </div>
-      </div>
-      <div class="work-metrics">
-        <div class="work-metric-item">
-          <div class="work-metric-val">10+</div>
-          <div class="work-metric-key">Projects Shipped</div>
-        </div>
-        <div class="work-metric-item">
-          <div class="work-metric-val blue">100%</div>
-          <div class="work-metric-key">SLA Achieved</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- TECH STACK -->
-<section id="stack">
-  <div class="section-tag">Tech Stack</div>
-  <h2 class="section-h2">Tools I <em>master</em></h2>
-  <div class="stack-grid fade-up">
-    <div class="stack-card">
-      <div class="stack-icon-wrap">☁️</div>
-      <div class="stack-name">AWS</div>
-      <div class="stack-desc">EC2, Lambda, S3, SQS, SNS, CloudWatch, IAM</div>
-    </div>
-    <div class="stack-card">
-      <div class="stack-icon-wrap">⎈</div>
-      <div class="stack-name">Kubernetes</div>
-      <div class="stack-desc">Container orchestration, zero-downtime deploys</div>
-    </div>
-    <div class="stack-card">
-      <div class="stack-icon-wrap">🐳</div>
-      <div class="stack-name">Docker</div>
-      <div class="stack-desc">Containerization, consistent build environments</div>
-    </div>
-    <div class="stack-card">
-      <div class="stack-icon-wrap">🏗️</div>
-      <div class="stack-name">Terraform</div>
-      <div class="stack-desc">Infrastructure as Code, cloud provisioning</div>
-    </div>
-    <div class="stack-card">
-      <div class="stack-icon-wrap">🔄</div>
-      <div class="stack-name">CI/CD</div>
-      <div class="stack-desc">Jenkins, GitHub Actions, pipeline design</div>
-    </div>
-    <div class="stack-card">
-      <div class="stack-icon-wrap">🐍</div>
-      <div class="stack-name">Python</div>
-      <div class="stack-desc">Automation scripts, Lambda functions</div>
-    </div>
-    <div class="stack-card">
-      <div class="stack-icon-wrap">🔌</div>
-      <div class="stack-name">REST APIs</div>
-      <div class="stack-desc">Integration design, third-party services</div>
-    </div>
-    <div class="stack-card">
-      <div class="stack-icon-wrap">🛍️</div>
-      <div class="stack-name">Shopify</div>
-      <div class="stack-desc">eCommerce, WooCommerce, custom themes</div>
-    </div>
-  </div>
-</section>
-
-<!-- CERTIFICATIONS -->
-<section style="background: var(--off); border-top: 1px solid var(--border);" id="skills">
-  <div class="section-tag">Certifications</div>
-  <h2 class="section-h2">Verified <em>credentials</em></h2>
-  <div class="cert-row fade-up">
-
-    <div class="cert-card">
-      <div class="cert-spin-badge">
-        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="22" cy="22" r="20" stroke="#1a6bfa" stroke-width="1.5" stroke-dasharray="5 3"/>
-          <circle cx="22" cy="4" r="3" fill="#1a6bfa"/>
-        </svg>
-      </div>
-      <div class="cert-icon">☁️</div>
-      <div class="cert-org">Amazon Web Services</div>
-      <div class="cert-name">AWS Certified Solutions Architect</div>
-      <div class="cert-meta">Cloud infrastructure & architecture best practices</div>
-    </div>
-
-    <div class="cert-card">
-      <div class="cert-spin-badge">
-        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation-duration: 4s !important;">
-          <circle cx="22" cy="22" r="20" stroke="#00a86b" stroke-width="1.5" stroke-dasharray="3 5"/>
-          <circle cx="22" cy="4" r="3" fill="#00a86b"/>
-        </svg>
-      </div>
-      <div class="cert-icon" style="background: var(--green-light);">⎈</div>
-      <div class="cert-org">CNCF / Linux Foundation</div>
-      <div class="cert-name">Certified Kubernetes Administrator</div>
-      <div class="cert-meta">Container orchestration & cluster management</div>
-    </div>
-
-    <div class="cert-card">
-      <div class="cert-spin-badge">
-        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation-duration: 9s !important; animation-direction: reverse !important;">
-          <circle cx="22" cy="22" r="20" stroke="#d97706" stroke-width="1.5" stroke-dasharray="7 2"/>
-          <circle cx="22" cy="4" r="3" fill="#d97706"/>
-        </svg>
-      </div>
-      <div class="cert-icon" style="background: var(--amber-light);">📋</div>
-      <div class="cert-org">PMI / Agile</div>
-      <div class="cert-name">Project Management Professional</div>
-      <div class="cert-meta">Agile delivery, stakeholder management, risk</div>
-    </div>
-
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section id="experience">
-  <div class="section-tag">Experience</div>
-  <h2 class="section-h2">Where I've <em>worked</em></h2>
-  <div class="timeline fade-up">
-    <div class="tl-item">
-      <div class="tl-date">2022 — Present</div>
-      <div>
-        <div class="tl-role">DevSecOps Engineer & Project Management Associate</div>
-        <div class="tl-company">Global Tech Organization · Remote (US / EU)</div>
-        <p class="tl-desc">Led delivery of 15+ global projects with 100% SLA compliance. Architected CI/CD pipelines reducing deployment time by 20% and manual operations by 80%. Built serverless AWS data pipelines cutting operational costs by 60%.</p>
-        <div class="tl-tags">
-          <span class="tl-tag">AWS</span>
-          <span class="tl-tag">Kubernetes</span>
-          <span class="tl-tag">Terraform</span>
-          <span class="tl-tag">Jenkins</span>
-          <span class="tl-tag">Agile</span>
-        </div>
-      </div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-date">2020 — 2022</div>
-      <div>
-        <div class="tl-role">Cloud Infrastructure Engineer</div>
-        <div class="tl-company">eCommerce & Web Projects</div>
-        <p class="tl-desc">Delivered Shopify and WooCommerce solutions for international clients. Managed cloud hosting infrastructure, API integrations, and performance optimization across 10+ e-commerce properties.</p>
-        <div class="tl-tags">
-          <span class="tl-tag">Shopify</span>
-          <span class="tl-tag">WooCommerce</span>
-          <span class="tl-tag">REST APIs</span>
-          <span class="tl-tag">Cloud Hosting</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="contact-section" style="border-top: 1px solid var(--border);">
-  <div class="contact-ring"></div>
-  <div class="contact-ring-2"></div>
-  <div style="position:relative;z-index:5;">
-    <p class="contact-eyebrow fade-up">Let's work together</p>
-    <h2 class="contact-h2 fade-up">Have a project<br>in mind? <em>Let's talk.</em></h2>
-    <p class="contact-sub fade-up">Open to full-time roles, consulting engagements, and exciting infrastructure challenges.</p>
-    <a href="mailto:gaurav04099@gmail.com" class="contact-email fade-up">gaurav04099@gmail.com</a>
-    <div style="display:flex;gap:12px;justify-content:center;" class="fade-up">
-      <a href="mailto:gaurav04099@gmail.com" class="btn-blue">Send an email →</a>
-      <a href="https://www.linkedin.com/in/gaurav0090/" target="_blank" class="btn-outline">LinkedIn ↗</a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <span>© 2026 Gaurav Kumar Singh</span>
-  <span style="color: var(--border3);">·</span>
-  <span>DevSecOps Engineer · Project Manager</span>
+© 2026 Gaurav Kumar Singh
 </footer>
 
 <script>
-  // Hide loader
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      document.getElementById('loader').classList.add('hidden');
-    }, 800);
-  });
 
-  // Scroll fade-up
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+/* SCROLL PROGRESS */
+window.addEventListener('scroll',()=>{
+  const scrolled=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  document.getElementById('progress').style.width=scrolled+"%";
+});
 
-  // Stagger children
-  document.querySelectorAll('.ring-card').forEach((el, i) => { el.style.transitionDelay = i * 60 + 'ms'; });
-  document.querySelectorAll('.work-card').forEach((el, i) => { el.style.transitionDelay = i * 80 + 'ms'; });
-  document.querySelectorAll('.stack-card').forEach((el, i) => { el.style.transitionDelay = i * 50 + 'ms'; });
-  document.querySelectorAll('.cert-card').forEach((el, i) => { el.style.transitionDelay = i * 100 + 'ms'; });
+/* DARK MODE */
+document.getElementById('toggle').onclick=()=>{
+  document.body.classList.toggle('dark');
+};
 
-  // Count-up
-  function animateCount(el) {
-    const target = parseInt(el.dataset.target);
-    const suffix = el.dataset.suffix || '';
-    let start = 0;
-    const step = target / 50;
-    const t = setInterval(() => {
-      start += step;
-      if (start >= target) { start = target; clearInterval(t); }
-      el.textContent = Math.floor(start) + suffix;
-    }, 24);
-  }
+/* CURSOR */
+const cursor=document.createElement('div');
+cursor.classList.add('cursor');
+document.body.appendChild(cursor);
 
-  const cObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { animateCount(e.target); cObs.unobserve(e.target); } });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('.count-up').forEach(el => cObs.observe(el));
+document.addEventListener('mousemove',e=>{
+  cursor.style.left=e.clientX+'px';
+  cursor.style.top=e.clientY+'px';
+});
 
-  // Animate ring fill
-  function animateRings() {
-    document.querySelectorAll('.ring-fill').forEach(ring => {
-      const pct = parseFloat(ring.dataset.pct) / 100;
-      const circumference = 251.2;
-      const offset = circumference * (1 - pct);
-      ring.style.strokeDashoffset = offset;
-    });
-  }
+/* TYPING */
+const texts=[
+"Building resilient infrastructure",
+"Scaling DevOps globally",
+"Automating cloud systems"
+];
 
-  const ringObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { animateRings(); ringObs.disconnect(); } });
-  }, { threshold: 0.2 });
-  const ringSection = document.querySelector('.ring-grid');
-  if (ringSection) ringObs.observe(ringSection);
+let i=0,j=0,current="",deleting=false;
 
-  // Nav scroll style
-  const nav = document.querySelector('nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      nav.style.boxShadow = '0 2px 16px rgba(0,0,0,0.08)';
-    } else {
-      nav.style.boxShadow = 'none';
+function type(){
+  current=texts[i];
+
+  if(!deleting){
+    j++;
+    if(j===current.length) deleting=true;
+  }else{
+    j--;
+    if(j===0){
+      deleting=false;
+      i=(i+1)%texts.length;
     }
-  });
+  }
+
+  document.getElementById("typing").textContent=current.substring(0,j);
+  setTimeout(type,deleting?40:80);
+}
+type();
+
 </script>
+
 </body>
 </html>
