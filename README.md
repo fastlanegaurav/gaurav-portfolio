@@ -180,7 +180,7 @@ open index.html
 * Site Reliability Engineering
 * CI/CD Pipeline Architecture
 
----
+--
 
 ## 👨‍💻 Author
 
